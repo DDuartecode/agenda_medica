@@ -10,10 +10,10 @@ define(USUARIO, 'root');
 define(SENHA, '');
 
 define(DS, DIRECTORY_SEPARATOR); // defino uma outra variável global para o directory_separator, tornando ela mais curta
-define(DIR_PROJETO, 'agenda');
+define(DIR_PROJETO, __DIR__);
 
 if (file_exists('autoload.php')) {
-    include 'aoutoload.php';
+    require 'autoload.php';
 } else {
     echo 'Erro ao incluir bootstrap';
     exit;
