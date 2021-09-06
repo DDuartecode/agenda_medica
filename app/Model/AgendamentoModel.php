@@ -57,8 +57,7 @@ class AgendamentoModel
         try {
             $stmt->execute();
         } catch (PDOException $e) {
-            echo $e->getMessage();
-            exit;
+            $e->getMessage();
         }
         return $stmt->rowCount();
     }
@@ -75,6 +74,36 @@ class AgendamentoModel
         if ($stmt->rowCount() > 0) {
             throw new InvalidArgumentException(GenericConsts::MSG_ERRO_HORARIO_AGENDADO);
         };
+    }
+
+    public function searchAgendamento($data_ini = null, $data_fim = null)
+    {
+        $where = null;
+        if ($data_ini && $data_fim || $data_ini !== '' && $data_fim !== '') {
+
+            $where = " BETWEEN :data_ini AND :data_fim";
+        } elseif ($data_ini && !$data_fim || $data_ini !== '' && $data_fim === '') {
+
+            $where = " WHERE consulta_ini = :data_ini";
+        } elseif (!$data_ini && $data_fim || $data_ini === '' && $data_fim !== '') {
+
+            $where = " WHERE consulta_fim = :data_fim";
+        } else {
+
+            throw new InvalidArgumentException(GenericConsts::MSG_ERRO_NENHUM_PARAMETRO);
+        }
+
+        $consultaAgendamento = "SELECT * FROM " . self::TABELA . $where;
+
+        $stmt = $this->MySQL->getDb()->prepare($consultaAgendamento);
+        $stmt->bindparam(':data_ini', $data_ini);
+        $stmt->bindparam(':data_fim', $data_fim);
+        try {
+            $stmt->execute();
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+            exit;
+        }
     }
 
 

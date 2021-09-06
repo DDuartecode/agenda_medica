@@ -160,6 +160,10 @@ class AgendamentoController
         }
     }
 
+    private function pesquisar()
+    {
+    }
+
     private function validarRetornoRequest($return): void
     {
         if ($return === null) {
